@@ -77,6 +77,6 @@ extension Deferred: AwaitablePublisher where DeferredPublisher: AwaitablePublish
 extension Publishers.First: AwaitablePublisher {}
 extension Publishers.FirstWhere: AwaitablePublisher {}
 extension Publishers.TryFirstWhere: AwaitablePublisher {}
-extension Task.Publisher: AwaitablePublisher {}
-extension Task.ThrowingPublisher: AwaitablePublisher {}
+extension Task.Publisher: AwaitablePublisher where Failure == Never {}
+extension Task.ThrowingPublisher: AwaitablePublisher where Failure == Error {}
 extension Fail: AwaitablePublisher {}

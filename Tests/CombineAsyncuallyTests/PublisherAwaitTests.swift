@@ -94,7 +94,7 @@ public extension Future where Failure == Error {
     typealias Closure = () async throws -> Output
     convenience init(async closure: @escaping Closure) {
         self.init { promise in
-            async {
+            Task {
                 do {
                     promise(.success(try await closure()))
                 } catch {

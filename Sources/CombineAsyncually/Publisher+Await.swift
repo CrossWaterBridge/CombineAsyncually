@@ -19,8 +19,8 @@ public extension Publisher {
     ///
     func `await`<T>(_ transform: @escaping (Output) async -> T) -> AnyPublisher<T, Failure> {
         self
-            .flatMap { value -> Task.Publisher<T> in
-                Task.Publisher {
+            .flatMap { value -> Task<Output, Never>.Publisher<T> in
+                Task<Output, Never>.Publisher {
                     await transform(value)
                 }
             }
@@ -41,8 +41,8 @@ public extension Publisher where Failure == Error {
     ///
     func tryAwait<T>(_ transform: @escaping (Output) async throws -> T) -> AnyPublisher<T, Error> {
         self
-            .flatMap { value -> Task.ThrowingPublisher<T> in
-                Task.ThrowingPublisher {
+            .flatMap { value -> Task<Output, Error>.ThrowingPublisher<T> in
+                Task<Output, Error>.ThrowingPublisher {
                     try await transform(value)
                 }
             }
@@ -65,7 +65,7 @@ public extension Publisher where Failure == Never {
         self
             .setFailureType(to: Error.self)
             .flatMap { value -> Task.ThrowingPublisher<T> in
-                Task.ThrowingPublisher {
+                Task<Output, Error>.ThrowingPublisher {
                     try await transform(value)
                 }
             }

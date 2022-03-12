@@ -17,7 +17,7 @@ import Combine
 /// }
 /// ```
 ///
-public func withPublisher<Output>(_ closure: @escaping () async -> Output) -> Task.Publisher<Output> {
+public func withPublisher<Output>(_ closure: @escaping () async -> Output) -> Task<Output, Never>.Publisher<Output> {
     Task.Publisher(closure)
 }
 
@@ -31,6 +31,6 @@ public func withPublisher<Output>(_ closure: @escaping () async -> Output) -> Ta
 /// }
 /// ```
 ///
-public func withThrowingPublisher<Output>(_ closure: @escaping () async throws -> Output) -> Task.ThrowingPublisher<Output> {
+public func withThrowingPublisher<Output>(_ closure: @escaping () async throws -> Output) -> Task<Output, Error>.ThrowingPublisher<Output> {
     Task.ThrowingPublisher(closure)
 }

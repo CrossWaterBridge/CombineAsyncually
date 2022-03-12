@@ -25,7 +25,7 @@ public extension Task {
 
 // MARK: - Publisher Implementation
 
-extension Task.Publisher: Publisher {
+extension Task.Publisher: Publisher where Failure == Never {
 
     public typealias Output = Output
     public typealias Failure = Never
@@ -45,13 +45,13 @@ extension Task.Publisher {
 
         private let closure: Closure
 
-        private var handle: Task.Handle<Void, Never>?
+        private var handle: Task<Void, Never>?
         private var downstream: AnySubscriber<Output, Never>?
 
         private let handleLock = UnfairLock()
         private let downstreamLock = UnfairLock()
 
-        init<Downstream>(_ closure: @escaping Closure, downstream: Downstream) where Downstream: Subscriber, Output == Downstream.Input, Failure == Downstream.Failure {
+        init<Downstream>(_ closure: @escaping Closure, downstream: Downstream) where Downstream: Subscriber, Output == Downstream.Input, Failure == Downstream.Failure, Failure == Never {
             self.closure = closure
             self.downstream = AnySubscriber(downstream)
         }
@@ -80,7 +80,7 @@ extension Task.Publisher.Subscription: Subscription {
             }
 
             // run the async closure in a detached context
-            handle = detach { [closure, weak self] in
+            handle = .detached { [closure, weak self] in
                 let value = await closure()
                 self?.receive(value)
             }
