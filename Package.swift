@@ -9,7 +9,7 @@ let package = Package(
     // MARK: - Platform Support
 
     platforms: [
-        .iOS("15.0"),
+        .iOS("14.0"),
         .macOS("12.0"),
         .watchOS("8.0"),
         .tvOS("15.0")
